@@ -28,3 +28,38 @@ cd GmSSL-master
 make # 漫长的编译过程
 make install
 ```
+
+**2. 排查**
+直接执行`gmssl`命令会直接报错：
+```bash 
+$ gmssl 
+gmssl: error while loading shared libraries: libssl.so.1.1: cannot open shared object file: No such file or directory
+
+$ whereis gmssl
+gmssl: /usr/local/bin/gmssl
+
+$ ldd /usr/local/bin/gmssl 
+	linux-vdso.so.1 =>  (0x00007ffcba7a1000)
+	libssl.so.1.1 => not found
+	libcrypto.so.1.1 => not found
+	libdl.so.2 => /lib64/libdl.so.2 (0x00007fec70aba000)
+	libpthread.so.0 => /lib64/libpthread.so.0 (0x00007fec7089e000)
+	libc.so.6 => /lib64/libc.so.6 (0x00007fec704d0000)
+	/lib64/ld-linux-x86-64.so.2 (0x00007fec70cbe000)
+
+# 经检查，在/usr/local/lib64/目录下能够找到 notfound 的两个so库，并与编译出来的库做对比，MD5是一致的。
+$ md5sum  /usr/local/lib64/libcrypto.so libcrypto.so
+38bc417f9cdb50b26714781890350d8e  /usr/local/lib64/libcrypto.so
+38bc417f9cdb50b26714781890350d8e  libcrypto.so
+
+# 打开Makefile，将 LDFLAG= 修改为 "LDFLAGS= -Wl,-rpath=$(LIBRPATH)"
+$ vim Makefile
+
+# 删除编译好的gmssl可执行程序，重新执行Makefile，并拷贝到目标路径
+$ rm -fr ./apps/gmssl && make && cp -af ./app/gmssl /usr/local/bin/gmssl
+
+# 再次执行gmssl命令，正常
+$ gmssl
+GmSSL>
+
+```

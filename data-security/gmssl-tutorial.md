@@ -30,7 +30,7 @@ make install
 ```
 
 **2. 排查**
-直接执行`gmssl`命令会直接报错：
+直接执行`gmssl`命令会直接报错：（撰写此文档的时间为2021-05-07日，不清楚后续GmSSL官方是否会修复这个问题）
 ```bash 
 $ gmssl 
 gmssl: error while loading shared libraries: libssl.so.1.1: cannot open shared object file: No such file or directory
@@ -63,3 +63,56 @@ $ gmssl
 GmSSL>
 
 ```
+
+
+**3. GMCA**
+
+在GmSSL的源代码目录中发现一个GmCA工具，并查找到了其描述文档：[点击传送门](http://gmssl.org/docs/ca.html)
+
+```bash
+# 将GmCA拷贝到目标目录
+$ cp ./apps/gmca/gmca /usr/local/bin/gmca
+
+# 新建一个自助域名证书的目录
+$ mkdir ~/GmCA
+$ cd ~/GmCA
+
+# 初始化CA环境
+$ gmca --setup
+
+# 检查目录
+$ ls .ca
+cacert.pem  certs  crl  crlnumber  csr  index.txt  keys  newcerts  private  serial
+
+# 检查CA公钥，其中签发者标识为：PKUCA
+$ openssl x509 -in ./.ca/cacert.pem -noout -text
+
+# 生成一套服务器证书，域名为：test.ir0.cn
+$ gmca -gencsr test.ir0.cn
+$ gmca -signcsr test.ir0.cn
+Using configuration from ./signcsr.cnf
+Can't open ./signcsr.cnf for reading, No such file or directory
+139937687029568:error:02001002:system library:fopen:No such file or directory:crypto/bio/bss_file.c:74:fopen('./signcsr.cnf','r')
+139937687029568:error:2006D080:BIO routines:BIO_new_file:no such file:crypto/bio/bss_file.c:81:
+
+# 又报错了，从源代码目录拷贝缺失的文件到当前目录，并重新签名
+$ cp ~/GmSSL-master/apps/gmca/signcsr.cnf .
+$ gmca -signcsr test.ir0.cn
+
+# 签发成功了
+$ gmca -listcerts
+220507081716Z 01 /C=CN/ST=BJ/O=PKU/OU=Sign/CN=test.ir0.cn
+
+# 检查私钥格式，确认使用了SM2的ECC算法
+$ openssl ec -in .ca/keys/test.ir0.cn.key -noout -text
+
+# 检查证书签名方法，确认是SM3的签名算法
+$ openssl x509 -in .ca/certs/01.pem -noout -text
+
+
+# 将私钥、证书、CA证书打包拷贝出来备用
+$ tar zcvf test.ir0.cn.tar.gz .ca/cacert.pem  .ca/certs/01.pem  .ca/keys/test.ir0.cn.key
+
+```
+
+

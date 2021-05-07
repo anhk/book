@@ -3,7 +3,11 @@
 
 ## 前言
 
-有个项目需要过密评，需要将应用系统改造为使用国密证书。经过调研OpenSSL 1.1.1+版本已经支持了SMX系列的算法，可以生成SM2的公私钥对，但是只支持SHA算法签名的证书，不支持使用SM3算法签名的证书。故这里调研大名鼎鼎的GmSSL，看看对国密证书的支持情况。
+有个项目需要过密评，需要将应用系统改造为使用国密证书。
+
+经过调研OpenSSL 1.1.1+版本已经支持了SMX系列的算法，可以生成SM2的公私钥对，但是只支持SHA算法签名的证书，不支持使用SM3算法签名的证书；同时也不支持GM系列的套件。
+
+故这里调研大名鼎鼎的GmSSL，看看对国密证书的支持情况。
 
 ## 环境准备
 
@@ -32,7 +36,7 @@ make install
 **2. 排查**
 直接执行`gmssl`命令会直接报错：（撰写此文档的时间为2021-05-07日，不清楚后续GmSSL官方是否会修复这个问题）
 ```bash 
-$ gmssl 
+$ gmssl version 
 gmssl: error while loading shared libraries: libssl.so.1.1: cannot open shared object file: No such file or directory
 
 $ whereis gmssl
@@ -59,59 +63,127 @@ $ vim Makefile
 $ rm -fr ./apps/gmssl && make && cp -af ./app/gmssl /usr/local/bin/gmssl
 
 # 再次执行gmssl命令，正常
-$ gmssl
-GmSSL>
+$ gmssl version
+GmSSL 2.5.4 - OpenSSL 1.1.0d  19 Jun 2019
+
 
 ```
 
+**3. 签分证书**
 
-**3. GMCA**
-
-在GmSSL的源代码目录中发现一个GmCA工具，并查找到了其描述文档：[点击传送门](http://gmssl.org/docs/ca.html)
+根据国密的标准，服务端证书分为签名证书和加密证书，其中签名证书负责对ClientHello和ServerHello中的随机数进行签名，客户端使用服务器的签名证书公钥进行验签；而后客户端使用服务器的加密证书公钥对ClientKeyExchange的48字节长度PreMasterKey进行加密，服务端使用加密证书私钥对该数据进行解密。而后的流程则与标准RSA步骤相同。
 
 ```bash
-# 将GmCA拷贝到目标目录
-$ cp ./apps/gmca/gmca /usr/local/bin/gmca
 
-# 新建一个自助域名证书的目录
-$ mkdir ~/GmCA
-$ cd ~/GmCA
+# 初始化
+echo 00 > ca.srl
 
-# 初始化CA环境
-$ gmca --setup
+# 生成CA证书
+$ gmssl ecparam -genkey -name sm2p256v1 -noout -out ca.key
+$ gmssl req -new -key ca.key -out ca.csr -subj "/C=CN/O=ir0cn/CN=ir0cn-CA"
+$ gmssl x509 -req -days 3650 -sm3 -extensions v3_ca -extfile <(printf "[v3_ca]\nbasicConstraints = CA:TRUE\n") -in ca.csr -signkey ca.key -out ca.crt
 
-# 检查目录
-$ ls .ca
-cacert.pem  certs  crl  crlnumber  csr  index.txt  keys  newcerts  private  serial
+# 生成服务器签名证书，并使用CA签名
+$ gmssl ecparam -genkey -name sm2p256v1 -noout -out ir0.cn.sig.key
+$ gmssl req -new -key ir0.cn.sig.key -out ir0.cn.sig.csr -subj "/C=CN/O=ir0cn/CN=*.ir0.cn"
+$ gmssl x509 -req -days 3650 -sm3 -extfile <(printf "keyUsage=digitalSignature,nonRepudiation\nsubjectAltName=DNS:api.ir0.cn,DNS:console.ir0.cn") -in ir0.cn.sig.csr -CA ca.crt -CAkey ca.key -out ir0.cn.sig.crt
 
-# 检查CA公钥，其中签发者标识为：PKUCA
-$ openssl x509 -in ./.ca/cacert.pem -noout -text
-
-# 生成一套服务器证书，域名为：test.ir0.cn
-$ gmca -gencsr test.ir0.cn
-$ gmca -signcsr test.ir0.cn
-Using configuration from ./signcsr.cnf
-Can't open ./signcsr.cnf for reading, No such file or directory
-139937687029568:error:02001002:system library:fopen:No such file or directory:crypto/bio/bss_file.c:74:fopen('./signcsr.cnf','r')
-139937687029568:error:2006D080:BIO routines:BIO_new_file:no such file:crypto/bio/bss_file.c:81:
-
-# 又报错了，从源代码目录拷贝缺失的文件到当前目录，并重新签名
-$ cp ~/GmSSL-master/apps/gmca/signcsr.cnf .
-$ gmca -signcsr test.ir0.cn
-
-# 签发成功了
-$ gmca -listcerts
-220507081716Z 01 /C=CN/ST=BJ/O=PKU/OU=Sign/CN=test.ir0.cn
-
-# 检查私钥格式，确认使用了SM2的ECC算法
-$ openssl ec -in .ca/keys/test.ir0.cn.key -noout -text
-
-# 检查证书签名方法，确认是SM3的签名算法
-$ openssl x509 -in .ca/certs/01.pem -noout -text
-
-# 将私钥、证书、CA证书打包拷贝出来备用
-$ tar zcvf test.ir0.cn.tar.gz .ca/cacert.pem  .ca/certs/01.pem  .ca/keys/test.ir0.cn.key
+# 生成服务器加密证书，并使用CA签名
+$ gmssl ecparam -genkey -name sm2p256v1 -noout -out ir0.cn.enc.key
+$ gmssl req -new -key ir0.cn.enc.key -out ir0.cn.enc.csr -subj "/C=CN/O=ir0cn/CN=*.ir0.cn"
+$ gmssl x509 -req -days 3650 -sm3 -extfile <(printf "keyUsage= keyEncipherment,dataEncipherment,keyAgreement\nsubjectAltName=DNS:api.ir0.cn,DNS:console.ir0.cn") -in ir0.cn.enc.csr -CA ca.crt -CAkey ca.key -out ir0.cn.enc.crt
 
 ```
 
 
+## Nginx加载国密证书
+
+**方案1**
+
+GmSSL提供了一个可以与Nginx集成的OpenSSL版本，无需修改Nginx代码就可集成，支持国密+RSA双证书同时使用，**不过免费版在每年年底会失效**，使程序无法运行，需更新最新的版本才能再使用一年。
+[传送门](https://www.gmssl.cn/gmssl/index.jsp) 点击“国密Web服务器” -> Nginx(国密版)
+
+由于我们做密评是需要商用的，所以暂不会考虑GmSSL的免费版本。
+
+**方案2**
+
+经过调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，以及开源Nginx-GM(基于1.17.2修改[传送门](https://github.com/pengtianabc/nginx-gm))，其修改主要是增加了加密证书、签名证书的处理。
+
+这里选择Nginx-GM与GmSSL的集成方案进行测试。
+
+```bash
+# 下载Nginx-GM并解压
+$ wget https://github.com/pengtianabc/nginx-gm/archive/refs/heads/master.zip -O nginx-gm-master.zip
+$ unzip nginx-gm-master.zip
+$ cd nginx-gm-master
+
+# 修改build.sh的编译nginx的参数，主要修改最后一行 --with-openssl=GmSSL的路径
+$ vim build.sh
+
+# 安装依赖包
+$ yum install -y pcre-devel zlib-devel
+
+# 编译
+$ ./build.sh
+$ make && make install
+
+```
+
+**配置nginx并启动**
+
+```bash
+# 编辑nginx配置文件
+$ vim /etc/nginx.conf
+server {
+    listen       443 ssl;
+    server_name  *.ir0.cn;
+
+    ssl_protocols TLSv1.2 TLSv1.3 GMTLS;
+
+    # 签名证书
+    ssl_certificate_key     certs/ir0.cn.sig.key;
+    ssl_certificate         certs/ir0.cn.sig.crt;
+
+    # 加密证书
+    ssl_certificate_key     certs/ir0.cn.enc.key;
+    ssl_certificate         certs/ir0.cn.enc.crt;
+
+    ssl_session_cache       shared:SSL:1m;
+    ssl_session_timeout     5m;
+
+    # 套件
+    ssl_ciphers ECDHE-SM2-WITH-SMS4-GCM-SM3:SM2-WITH-SMS4-SM3:SM2DHE-WITH-SMS4-SM3:ECDHE-SM2-WITH-SMS4-SM3:ECDHE-SM4-SM3:!aNull:!MD5;
+    ssl_prefer_server_ciphers  on; 
+
+    location / { 
+        root   html;
+        index  index.html index.htm;
+    }   
+}
+
+
+# 启动Nginx
+$ nginx -t && nginx
+
+# 使用GmSSL检测证书
+$ gmssl s_client -connect 127.0.0.1:443
+```
+
+
+## 国密浏览器
+
+360安全浏览器可以免费使用国密证书30天体验功能 ([传送门](http://browser.360.cn/))，不支持导入自签名CA证书的功能；访问网站后显示：`此网站尚未经过身份认证`。
+
+360企业安全浏览器提供90天免费试用功能 ([传送门](https://browser.360.cn/se/ver/ent.html))，可以在管理后台导入自定义CA。
+
+**管理后台上传证书**
+
+在[360企业版浏览器管理后台](https://saas.browser.360.cn/cerManage.html)上传服务端证书及CA根证书
+
+**浏览器打开国密SSL协议支持**
+
+在360企业版浏览器 -> 设置 -> 安全设置 -> 启用国密SSL协议支持
+
+**通过浏览器访问**
+
+通过浏览器访问 https://test.ir0.cn，能够直接通过国密证书访问网站。

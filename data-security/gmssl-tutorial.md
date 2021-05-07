@@ -109,7 +109,6 @@ $ openssl ec -in .ca/keys/test.ir0.cn.key -noout -text
 # 检查证书签名方法，确认是SM3的签名算法
 $ openssl x509 -in .ca/certs/01.pem -noout -text
 
-
 # 将私钥、证书、CA证书打包拷贝出来备用
 $ tar zcvf test.ir0.cn.tar.gz .ca/cacert.pem  .ca/certs/01.pem  .ca/keys/test.ir0.cn.key
 

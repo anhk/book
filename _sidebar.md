@@ -5,5 +5,5 @@
 
 - Data Security
 
-    - [CCC](/data-security/ccc.md)
+    - [国密证书测试手记](/data-security/gmssl-tutorial.md)
     - [DDD](/data-security/ddd.md)

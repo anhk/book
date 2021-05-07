@@ -1,4 +1,0 @@
-# CCC
-
-
-Hello World

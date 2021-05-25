@@ -1,4 +1,0 @@
-# DDD 
-
-
-Hello World

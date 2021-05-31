@@ -121,7 +121,8 @@ $ cd nginx-gm-master
 $ vim build.sh
 
 # 安装依赖包
-$ yum install -y pcre-devel zlib-devel
+$ yum install -y pcre-devel zlib-devel           # centos
+$ apt install -y libpcre3-dev libghc-zlib-dev    # ubuntu
 
 # 编译
 $ ./build.sh

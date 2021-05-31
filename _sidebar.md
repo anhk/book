@@ -9,7 +9,3 @@
     - [生成各种证书的快捷命令](/data-security/ssl-tutorial.md)
     - [国密证书测试手记](/data-security/gmssl-tutorial.md)
   - 数据保护
-  
-- Other
-  - Tools
-    - [随机密码工具](/other/random-password.md)

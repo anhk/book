@@ -12,4 +12,4 @@
   
 - Other
   - Tools
-    - [随机密码工具]/other/random-password.md
+    - [随机密码工具](/other/random-password.md)

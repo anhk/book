@@ -10,3 +10,6 @@
     - [国密证书测试手记](/data-security/gmssl-tutorial.md)
   - 数据保护
   
+- Other
+  - Tools
+    - [随机密码工具]/other/random-password.md

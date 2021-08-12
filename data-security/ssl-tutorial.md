@@ -185,7 +185,7 @@ openssl ecparam -name prime256v1 -genkey -noout -out my.key.pem
 openssl pkey -in  my.key.pem -pubout -out my.pub.pem
 ```
 
-### 3. 强制使用RSA算法的CA证书对公钥进行签名
+### 4. 强制使用RSA算法的CA证书对公钥进行签名
 ```bash
 openssl x509 -req -in rsaclient.csr -CAkey ca.key -CA ca.crt  -force_pubkey my.pub.pem -out my.crt.pem -CAcreateserial 
 ```

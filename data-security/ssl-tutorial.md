@@ -167,6 +167,28 @@ openssl ecparam -in priv.key -name prime256v1
 openssl ec -in priv.key
 ```
 
+## 使用RSA算法的CA证书签发ECC证书
+### 1. 创建RSA算法的CA证书
+```bash
+openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" -days 3650
+```
+
+### 2. 创建RSA算法的私钥和CSR
+```bash
+openssl genrsa -out rsaclient.key 2048 
+openssl req -new -key rsaclient.key -out rsaclient.csr  -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" 
+```
+
+### 3. 创建ECC格式的私钥并提取公钥
+```bash
+openssl ecparam -name prime256v1 -genkey -noout -out my.key.pem
+openssl pkey -in  my.key.pem -pubout -out my.pub.pem
+```
+
+### 3. 强制使用RSA算法的CA证书对公钥进行签名
+```bash
+openssl x509 -req -in rsaclient.csr -CAkey ca.key -CA ca.crt  -force_pubkey my.pub.pem -out my.crt.pem -CAcreateserial 
+```
 
 
 ##  证书用法限制

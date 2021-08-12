@@ -5,10 +5,10 @@
 
 ```bash
 # 快速生成带密码的一对证书
-openssl req -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" -days 3650
+openssl req -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn" -days 3650
 
 # 快速生成不带密码的一对证书
-openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" -days 3650
+openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn" -days 3650
 
 ```
 
@@ -24,7 +24,7 @@ openssl genrsa -out ca.key 2048
 openssl genrsa -aes256 -out ca.key 2048
 
 # 生成证书请求文件
-openssl req -new -key ca.key -out ca.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc"
+openssl req -new -key ca.key -out ca.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn"
 
 # 自签名证书
 openssl x509 -req -days 3650 -sha1 -extensions v3_ca -signkey ca.key -in ca.csr -out ca.crt
@@ -39,7 +39,7 @@ openssl x509 -req -days 3650 -sha1 -extensions v3_ca -signkey ca.key -in ca.csr 
 openssl genrsa -out server.key 2048 【-pass:123456】
 
 # 生成证书请求文件
-openssl req -new -key server.key -out server.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc"
+openssl req -new -key server.key -out server.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn"
 
 # 使用CA证书签名
 openssl x509 -req -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
@@ -51,10 +51,10 @@ openssl x509 -req -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -CAcreatese
 
 ```bash
 # 快速生成私钥及CSR文件
-openssl req -newkey rsa:2048 -nodes -keyout server.key -subj "/C=CN/ST=BJ/L=BJ/O=anhk.inc./CN=*.anhk.cc" -out server.csr
+openssl req -newkey rsa:2048 -nodes -keyout server.key -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn" -out server.csr
 
 # 使用CA证书签名
-openssl x509 -req -extfile <(printf "subjectAltName=DNS:anhk.cc,DNS:www.anhk.cc") -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
+openssl x509 -req -extfile <(printf "subjectAltName=DNS:ir0.cn,DNS:www.ir0.cn") -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.crt
 ```
 
 
@@ -78,17 +78,17 @@ openssl rsa -in ca.key -out ca2.key
 ```bash
 # DV
 openssl genrsa -out my.dv.key 2048
-openssl req -new -key my.dv.key -out my.dv.csr -subj "/CN=dv.anhk.cc"
+openssl req -new -key my.dv.key -out my.dv.csr -subj "/CN=dv.ir0.cn"
 openssl x509 -req -days 3650 -sha1 -signkey my.dv.key -in my.dv.csr -out my.dv.crt
 
 # OV
 openssl genrsa -out my.ov.key 2048
-openssl req -new -key my.ov.key -out my.ov.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=ov.anhk.cc"
+openssl req -new -key my.ov.key -out my.ov.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=ov.ir0.cn"
 openssl x509 -req -days 3650 -sha1 -signkey my.ov.key -in my.ov.csr -out my.ov.crt
 
 # EV
 openssl genrsa -out my.ev.key 2048
-openssl req -new -key my.ev.key -out my.ev.csr -subj "/businessCategory=Private/serialNumber=5157550/jurisdictionC=US/CN=anhk.inc./O=anhk.inc./C=FR"
+openssl req -new -key my.ev.key -out my.ev.csr -subj "/businessCategory=Private/serialNumber=5157550/jurisdictionC=US/CN=ir0.inc./O=ir0.inc./C=FR"
 openssl x509 -req -days 3650 -sha1 -signkey my.ev.key -in my.ev.csr -out my.ev.crt
 ```
 
@@ -126,7 +126,7 @@ openssl ecparam -name secp521r1 -genkey -noout -param_enc explicit -out my.key.p
 ### 3. 生成CSR
 ```bash
 openssl req -new -sha256 -key my.key.pem -out my.csr.pem \
-	-subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc"
+	-subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn"
 ```
 
 ### 4. 签发（自签名）
@@ -145,7 +145,7 @@ openssl x509 -in my.crt.pem -text -noout
 ```bash
 openssl ecparam -name prime256v1 -genkey -param_enc named_curve -out my.key.pem
 openssl req -new -x509 -key my.key.pem -out my.crt.pem -days 730 \
--subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc"
+-subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn"
 ```
 
 ### 7. 将EC私钥压缩
@@ -170,13 +170,13 @@ openssl ec -in priv.key
 ## 使用RSA算法的CA证书签发ECC证书
 ### 1. 创建RSA算法的CA证书
 ```bash
-openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" -days 3650
+openssl req -nodes -new -x509 -keyout ca.key -out ca.crt -subj "/CN=Ir0RootCA" -days 3650
 ```
 
 ### 2. 创建RSA算法的私钥和CSR
 ```bash
 openssl genrsa -out rsaclient.key 2048 
-openssl req -new -key rsaclient.key -out rsaclient.csr  -subj "/C=CN/ST=Beijing/L=Beijing/O=anhk.inc./OU=anhk.cc/CN=*.anhk.cc" 
+openssl req -new -key rsaclient.key -out rsaclient.csr  -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn" 
 ```
 
 ### 3. 创建ECC格式的私钥并提取公钥
@@ -187,7 +187,9 @@ openssl pkey -in  my.key.pem -pubout -out my.pub.pem
 
 ### 4. 强制使用RSA算法的CA证书对公钥进行签名
 ```bash
-openssl x509 -req -in rsaclient.csr -CAkey ca.key -CA ca.crt  -force_pubkey my.pub.pem -out my.crt.pem -CAcreateserial 
+openssl x509 -req -in rsaclient.csr -CAkey ca.key -CA ca.crt -force_pubkey my.pub.pem -out my.crt.pem -CAcreateserial \
+        -extensions v3_ca -extfile <(printf "[v3_ca]\n     \
+        basicConstraints = CA:FALSE\nsubjectAltName=DNS:ir0.cn,DNS:www.ir0.cn") 
 ```
 
 
@@ -200,6 +202,6 @@ openssl x509 -req -days 3650 -sha256 -extensions v3_ca -extfile <(printf "[v3_ca
         encipherOnly, decipherOnly \n                                                   \
         extendedKeyUsage=critical,serverAuth,clientAuth,codeSigning,emailProtection,    \
         timeStamping,msCodeInd,msCodeCom,msCTLSign,msSGC,msEFS,nsSGC\n                  \
-        subjectAltName=DNS:anhk.cc,DNS:www.anhk.cc")                                    \
+        subjectAltName=DNS:ir0.cn,DNS:www.ir0.cn")                                    \
         -signkey ca.key -in ca.csr -out ca.crt
 ```

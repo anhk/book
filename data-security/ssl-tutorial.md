@@ -27,7 +27,7 @@ openssl genrsa -aes256 -out ca.key 2048
 openssl req -new -key ca.key -out ca.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=*.ir0.cn"
 
 # 自签名证书
-openssl x509 -req -days 3650 -sha1 -extensions v3_ca -signkey ca.key -in ca.csr -out ca.crt
+openssl x509 -req -days 3650 -sha256 -extensions v3_ca -signkey ca.key -in ca.csr -out ca.crt
 ```
 
 
@@ -79,17 +79,17 @@ openssl rsa -in ca.key -out ca2.key
 # DV
 openssl genrsa -out my.dv.key 2048
 openssl req -new -key my.dv.key -out my.dv.csr -subj "/CN=dv.ir0.cn"
-openssl x509 -req -days 3650 -sha1 -signkey my.dv.key -in my.dv.csr -out my.dv.crt
+openssl x509 -req -days 3650 -sha256 -signkey my.dv.key -in my.dv.csr -out my.dv.crt
 
 # OV
 openssl genrsa -out my.ov.key 2048
 openssl req -new -key my.ov.key -out my.ov.csr -subj "/C=CN/ST=Beijing/L=Beijing/O=ir0.inc./OU=ir0/CN=ov.ir0.cn"
-openssl x509 -req -days 3650 -sha1 -signkey my.ov.key -in my.ov.csr -out my.ov.crt
+openssl x509 -req -days 3650 -sha256 -signkey my.ov.key -in my.ov.csr -out my.ov.crt
 
 # EV
 openssl genrsa -out my.ev.key 2048
 openssl req -new -key my.ev.key -out my.ev.csr -subj "/businessCategory=Private/serialNumber=5157550/jurisdictionC=US/CN=ir0.inc./O=ir0.inc./C=FR"
-openssl x509 -req -days 3650 -sha1 -signkey my.ev.key -in my.ev.csr -out my.ev.crt
+openssl x509 -req -days 3650 -sha256 -signkey my.ev.key -in my.ev.csr -out my.ev.crt
 ```
 
 ###  8. 证书格式转换
@@ -120,7 +120,7 @@ openssl ecparam -list_curves
 
 ### 2. 生成私钥
 ```bash
-openssl ecparam -name secp521r1 -genkey -noout -param_enc explicit -out my.key.pem
+openssl ecparam -name prime256v1 -genkey -noout -param_enc explicit -out my.key.pem
 ```
 
 ### 3. 生成CSR

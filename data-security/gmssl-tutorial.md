@@ -172,26 +172,14 @@ $ gmssl s_client -connect 127.0.0.1:443
 
 ## 国密浏览器
 
-360安全浏览器可以免费使用国密证书30天体验功能 ([传送门](http://browser.360.cn/))，不支持导入自签名CA证书的功能；访问网站后显示：`此网站尚未经过身份认证`。
-
-360企业安全浏览器提供90天免费试用功能 ([传送门](https://browser.360.cn/se/ver/ent.html))，可以在管理后台导入自定义CA。
-
-**管理后台上传证书**
-
-在[360企业版浏览器管理后台](https://saas.browser.360.cn/cerManage.html)上传服务端证书及CA根证书
-
-**浏览器打开国密SSL协议支持**
-
-在360企业版浏览器 -> 设置 -> 安全设置 -> 启用国密SSL协议支持
-
-**通过浏览器访问**
-
-通过浏览器访问 [https://test.ir0.cn](https://test.ir0.cn)，能够直接通过国密证书访问网站。
-
 
 **密信浏览器**
 
 密信浏览器是WoSign基于Chromium开发的支持国密算法的浏览器，试用下来比360浏览器要好用，推荐([传送门](https://www.mesign.com/zh-cn/browser/index.html#dow)) 
+
+**SamariumBorwser**
+
+SamariumBorwser是GmSSL团队研发的基于Chromium的国密浏览器，推荐[传送门](https://github.com/guanzhi/SamariumBrowser)
 
 ## 制作的容器
 

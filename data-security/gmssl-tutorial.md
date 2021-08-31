@@ -107,25 +107,24 @@ GmSSL提供了一个可以与Nginx集成的OpenSSL版本，无需修改Nginx代�
 
 **方案2**
 
-经过调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，以及开源Nginx-GM(基于1.17.2修改[传送门](https://github.com/pengtianabc/nginx-gm))，其修改主要是增加了加密证书、签名证书的处理。
+经过调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，其修改主要是增加了加密证书、签名证书的处理。
 
-这里选择Nginx-GM与GmSSL的集成方案进行测试。
+这里选择Nginx与GmSSL的集成方案进行测试。
 
 ```bash
-# 下载Nginx-GM并解压
-$ wget https://github.com/pengtianabc/nginx-gm/archive/refs/heads/master.zip -O nginx-gm-master.zip
-$ unzip nginx-gm-master.zip
-$ cd nginx-gm-master
-
-# 修改build.sh的编译nginx的参数，主要修改最后一行 --with-openssl=GmSSL的路径
-$ vim build.sh
-
 # 安装依赖包
 $ yum install -y pcre-devel zlib-devel           # centos
 $ apt install -y libpcre3-dev libghc-zlib-dev    # ubuntu
 
+# 下载Nginx并解压
+$ wget https://github.com/nginx/nginx/archive/refs/tags/release-1.18.0.zip -O nginx-1.18.0.zip
+$ unzip nginx-1.18.0.zip 
+$ cd nginx-release-1.18.0 
+
+# 修改nginx的编译参数参数，主要是--with-openssl=GmSSL的路径
+$ ./auto/configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-threads --with-stream --with-stream_ssl_module --with-http_slice_module --with-mail --with-mail_ssl_module --with-file-aio --with-http_v2_module --with-openssl=/GmSSL-master 
+
 # 编译
-$ ./build.sh
 $ make && make install
 
 ```
@@ -139,7 +138,7 @@ server {
     listen       443 ssl;
     server_name  *.ir0.cn;
 
-    ssl_protocols TLSv1.2 TLSv1.3 GMTLS;
+    ssl_protocols TLSv1.1 TLSv1.2;
 
     # 签名证书
     ssl_certificate_key     certs/ir0.cn.sig.key;

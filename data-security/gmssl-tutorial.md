@@ -140,19 +140,28 @@ server {
 
     ssl_protocols TLSv1.1 TLSv1.2;
 
-    # 签名证书
+    # RSA证书
+    ssl_certificate_key     certs/ir0.cn.rsa.key;
+    ssl_certificate         certs/ir0.cn.rsa.crt;
+    
+    # ECC证书
+    #ssl_certificate_key     certs/ir0.cn.rsa.key;
+    #ssl_certificate         certs/ir0.cn.rsa.crt;
+
+    # SM2签名证书
     ssl_certificate_key     certs/ir0.cn.sig.key;
     ssl_certificate         certs/ir0.cn.sig.crt;
 
-    # 加密证书
+    # SM2加密证书
     ssl_certificate_key     certs/ir0.cn.enc.key;
     ssl_certificate         certs/ir0.cn.enc.crt;
 
     ssl_session_cache       shared:SSL:1m;
     ssl_session_timeout     5m;
 
-    # 套件
-    ssl_ciphers ECDHE-SM2-WITH-SMS4-GCM-SM3:SM2-WITH-SMS4-SM3:SM2DHE-WITH-SMS4-SM3:ECDHE-SM2-WITH-SMS4-SM3:ECDHE-SM4-SM3:!aNull:!MD5;
+    # 加密套件
+    #ssl_ciphers ECDHE-SM2-WITH-SMS4-GCM-SM3:SM2-WITH-SMS4-SM3:SM2DHE-WITH-SMS4-SM3:ECDHE-SM2-WITH-SMS4-SM3:ECDHE-SM4-SM3:!aNull:!MD5;
+    ssl_ciphers ECDHE-SM2-WITH-SMS4-GCM-SM3:SM2-WITH-SMS4-SM3:SM2DHE-WITH-SMS4-SM3:ECDHE-SM2-WITH-SMS4-SM3:ECDHE-SM4-SM3:EECDH+ECDSA+AES256:EECDH+aRSA+AES256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4:!DH:!DHE;
     ssl_prefer_server_ciphers  on; 
 
     location / { 

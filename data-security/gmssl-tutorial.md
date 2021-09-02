@@ -109,7 +109,7 @@ GmSSL提供了一个可以与Nginx集成的OpenSSL版本，无需修改Nginx代�
 
 经过调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，其修改主要是增加了加密证书、签名证书的处理。
 
-这里选择Nginx与GmSSL的集成方案进行测试。
+这里选择Nginx与GmSSL的集成方案进行测试。**注：nginx支持国密证书，无需编译GmSSL，直接指定原始代码路径即可。**
 
 ```bash
 # 安装依赖包
@@ -122,7 +122,40 @@ $ unzip nginx-1.18.0.zip
 $ cd nginx-release-1.18.0 
 
 # 修改nginx的编译参数参数，主要是--with-openssl=GmSSL的路径
-$ ./auto/configure --prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --with-http_ssl_module --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_stub_status_module --with-http_auth_request_module --with-threads --with-stream --with-stream_ssl_module --with-http_slice_module --with-mail --with-mail_ssl_module --with-file-aio --with-http_v2_module --with-openssl=/GmSSL-master 
+$ ./auto/configure --prefix=/etc/nginx                                 \
+      --sbin-path=/usr/sbin/nginx                                      \
+      --conf-path=/etc/nginx/nginx.conf                                \
+      --error-log-path=/var/log/nginx/error.log                        \
+      --http-log-path=/var/log/nginx/access.log                        \
+      --pid-path=/var/run/nginx.pid                                    \
+      --lock-path=/var/run/nginx.lock                                  \
+      --http-client-body-temp-path=/var/cache/nginx/client_temp        \
+      --http-proxy-temp-path=/var/cache/nginx/proxy_temp               \
+      --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp           \
+      --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp               \
+      --http-scgi-temp-path=/var/cache/nginx/scgi_temp                 \
+      --with-http_ssl_module                                           \
+      --with-http_realip_module                                        \
+      --with-http_addition_module                                      \
+      --with-http_sub_module                                           \
+      --with-http_dav_module                                           \
+      --with-http_flv_module                                           \
+      --with-http_mp4_module                                           \
+      --with-http_gunzip_module                                        \
+      --with-http_gzip_static_module                                   \
+      --with-http_random_index_module                                  \
+      --with-http_secure_link_module                                   \
+      --with-http_stub_status_module                                   \
+      --with-http_auth_request_module                                  \
+      --with-threads                                                   \
+      --with-stream                                                    \
+      --with-stream_ssl_module                                         \
+      --with-http_slice_module                                         \
+      --with-mail                                                      \
+      --with-mail_ssl_module                                           \
+      --with-file-aio                                                  \
+      --with-http_v2_module                                            \
+      --with-openssl=/GmSSL-master
 
 # 编译
 $ make && make install

@@ -100,16 +100,13 @@ $ gmssl x509 -req -days 3650 -sm3 -extfile <(printf "keyUsage= keyEncipherment,d
 
 **方案1**
 
-GmSSL提供了一个可以与Nginx集成的OpenSSL版本，无需修改Nginx代码就可集成，支持国密+RSA双证书同时使用，**不过免费版在每年年底会失效**，使程序无法运行，需更新最新的版本才能再使用一年。
-[传送门](https://www.gmssl.cn/gmssl/index.jsp) 点击“国密Web服务器” -> Nginx(国密版)
+调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，其修改主要是增加了加密证书、签名证书的处理。
 
-由于我们做密评是需要商用的，所以暂不会考虑GmSSL的免费版本。
 
 **方案2**
 
-经过调研江南天安的Nginx(基于1.16.0修改[传送门](https://github.com/jntass/Nginx_Tassl))，其修改主要是增加了加密证书、签名证书的处理。
+这里选择Nginx与GmSSL的[开源库](https://github.com/guanzhi/GmSSL)集成方案进行测试。**注：nginx支持国密证书，无需编译GmSSL，直接指定原始代码路径即可。**
 
-这里选择Nginx与GmSSL的集成方案进行测试。**注：nginx支持国密证书，无需编译GmSSL，直接指定原始代码路径即可。**
 
 ```bash
 # 安装依赖包

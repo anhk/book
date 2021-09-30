@@ -68,10 +68,11 @@ openssl x509 -in ca.crt -noout -text
 ```
 
 
-### 6. 私钥脱密
+### 6. 私钥脱密&加密
 
 ```bash
-openssl rsa -in ca.key -out ca2.key
+openssl rsa -in ca.key -out ca2.key          # 脱密
+openssl rsa -aes256 -in ca.key -out ca2.key  # 加密
 ```
 
 ###  7. 快速生成自签名证书

@@ -53,8 +53,8 @@ p.synFlood = CUSUM.NewCUSUM(2.2, 0.5, 4)
 ```go
 p.synFlood.Add(it.InSynsDivOutFins())
 if rh, _ := p.synFlood.Result(); rh > 100 {
-  fmt.Printf("-> CUSUM SynFlood: %26s\t%v\t%06f\t%6v\t%6v\n", path, it.Timestamp, rh,
-      it.Metrics.TcpInSyns.Max, it.Metrics.TcpOutFins.Max)
+  fmt.Printf("-> CUSUM SynFlood: %26s\t%v\t%06f\t%6v\t%6v\n", path, it.Timestamp,
+      rh, it.Metrics.TcpInSyns.Max, it.Metrics.TcpOutFins.Max)
   p.synFlood.Reset()
 }
 ```
@@ -139,8 +139,8 @@ p.finFlood = CUSUM.NewCUSUM(1.1, 0.5, 2)
 ```go
 p.finFlood.Add(it.InFinsDivOutFins())
 if rh, _ := p.finFlood.Result(); rh > 100 {
-  fmt.Printf("-> CUSUM FinFlood: %26s\t%v\t%06f\t%6v\t%6v\n", path, it.Timestamp, rh,
-      it.Metrics.TcpInFins.Max, it.Metrics.TcpOutFins.Max)
+  fmt.Printf("-> CUSUM FinFlood: %26s\t%v\t%06f\t%6v\t%6v\n", path, it.Timestamp,
+      rh, it.Metrics.TcpInFins.Max, it.Metrics.TcpOutFins.Max)
   p.finFlood.Reset()
 }
 ```

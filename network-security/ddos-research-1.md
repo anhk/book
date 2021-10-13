@@ -6,7 +6,7 @@
 $$\sigma=\sqrt{\frac{\sum_{i=1}^n{(x-\overline{x})^2}}{n}}$$
 
 CUSUM公式：
-$$S_{H_{n+1}}=max(0,S_{H_n}+Z_n-w);$$
+$$S_{H_{n+1}}=max(0,S_{H_n}+Z_n-w)$$
 $$Z_n=\frac{X_n-\overline{x}}{\sigma_X}$$
 
 其中 $\sigma{x}$为标准差，$\overline{x}$为算术平均数，$S_{H_{n}}$为当前时刻的累积和。

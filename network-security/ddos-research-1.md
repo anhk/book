@@ -2,12 +2,9 @@
 
 ## 涉及公式
 
-标准差公式：
-$$\sigma=\sqrt{\frac{\sum_{i=1}^n{(x-\overline{x})^2}}{n}}$$
+标准差公式：$\sigma=\sqrt{\frac{\sum_{i=1}^n{(x-\overline{x})^2}}{n}}$
 
-CUSUM公式：
-$$S_{H_{n+1}}=max(0,S_{H_n}+Z_n-w)$$
-$$Z_n=\frac{X_n-\overline{x}}{\sigma_X}$$
+CUSUM公式：$S_{H_{n+1}}=max(0,S_{H_n}+Z_n-w)$; $Z_n=\frac{X_n-\overline{x}}{\sigma_X}$
 
 其中 $\sigma{x}$为标准差，$\overline{x}$为算术平均数，$S_{H_{n}}$为当前时刻的累积和。
 
@@ -104,7 +101,7 @@ MEAN:   ./data/106.39.164.60.txt	0.533345	22.788553
 
 ### Fin数据包统计分析
 
-在正常情况下，流入的Fin包与流出的FIN包成1:1的关系，通过对流量最大100个IP地址的数据包类型的统计信息进行分析，发现 `InFin:OutFin` 包的比例比较符合`1:1` ，标准差普遍在0.5以下（不统计每秒小于500个FIN包的情况）
+在正常情况下，流入的Fin包与流出的FIN包成1:1的关系，通过对流量最大100个IP地址的数据包类型的统计信息进行分析，发现 `InFin:OutFin` 包的比例比较符合`1:1` ，`标准差`普遍在0.5以下（不统计每秒小于500个FIN包的情况）
 
 ### 使用CUSUM算法对FinFlood进行识别
 

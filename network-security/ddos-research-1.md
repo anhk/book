@@ -67,13 +67,13 @@ MEAN:  ./data/106.39.168.3.txt  0.426843  42.899501
 ==> 发现IP地址为`106.39.164.60`在timestamp为`1633899704`时发生SynFlood攻击，持续到`1633899776`止。
 ```
 MEAN:   ./data/106.39.164.60.txt	0.533345	22.788553
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899704	582.600000	   591	     2
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899705	1317.600000	   663	     0
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899704	582.600000	   591   2
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899705	1317.600000	   663   0
 ...... 这里是省略号
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899773	1175.600000	   592	     0
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899774	2937.600000	  1473	     0
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899775	2471.600000	  1240	     0
--> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899776	3697.600000	  1853	     0
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899773	1175.600000	   592   0
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899774	2937.600000	  1473   0
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899775	2471.600000	  1240   0
+-> CUSUM SynFlood:   ./data/106.39.164.60.txt	1633899776	3697.600000	  1853   0
 ```
 
 ![](ddos-research-1/2.png)
@@ -92,13 +92,13 @@ MEAN:   ./data/106.39.164.60.txt	0.533345	22.788553
 ```go
 // InFinsDivOutFins Check FinFlood
 func (i *Item) InFinsDivOutFins() float64 {
-    if i.Metrics.TcpInFins.Max < 500 {
-        return float64(0)
-    }
-    if i.Metrics.TcpOutFins.Max == 0 {
-        return float64(i.Metrics.TcpInFins.Max)
-    }
-    return float64(i.Metrics.TcpInFins.Max) / float64(i.Metrics.TcpOutFins.Max)
+  if i.Metrics.TcpInFins.Max < 500 {
+    return float64(0)
+  }
+  if i.Metrics.TcpOutFins.Max == 0 {
+    return float64(i.Metrics.TcpInFins.Max)
+  }
+  return float64(i.Metrics.TcpInFins.Max) / float64(i.Metrics.TcpOutFins.Max)
 }
 ```
 
@@ -117,7 +117,7 @@ p.finFlood = CUSUM.NewCUSUM(1.1, 0.5, 2)
 ```go
 p.finFlood.Add(it.InFinsDivOutFins())
 if rh, _ := p.finFlood.Result(); rh > 100 {
-    p.finFlood.Reset()
+  p.finFlood.Reset()
 }
 ```
 

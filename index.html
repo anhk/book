@@ -56,9 +56,10 @@
   <script>   
     window.onhashchange = function(event){
       if(event.newURL.split('#')[0] !== event.oldURL.split('#')[0]) {
-        alert('reload')
         location.reload()
       }
+      alert(event.newURL.split('#')[0])
+      alert(event.oldURL.split('#')[0])
     }
   </script>
 </body>

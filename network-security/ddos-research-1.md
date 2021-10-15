@@ -170,3 +170,12 @@ if rh, _ := p.finFlood.Result(); rh > 100 {
 
 1. `InSyn:OutFin`的比例存在`2:1`的情况，需要排查是否对清洗流量进行了累加所致
 2. 未备案域名的阻断会造成客户端重传Fin包的情况发生，有可能会对FinFlood造成误报
+
+
+<script>   
+  window.onhashchange = function(event){
+    if(event.newURL.split('?')[0] !== event.oldURL.split('?')[0]) {
+      location.reload()
+    }
+  }
+</script>

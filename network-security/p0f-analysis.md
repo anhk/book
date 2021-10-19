@@ -1,4 +1,4 @@
-# P0F分析
+# 被动流量类型识别-P0F分析
 
 p0f是一款被动式指纹识别工具，通过捕获并分析主机收发的数据包，对目标主机进行基于指纹的鉴别。
 
@@ -69,7 +69,7 @@ sig   = 16436
 ```
 
 代码中计算MTU方式，使用TCP头中的MSS选项，加上IP头和TCP头长度得出。
-```cpp
+```c
 if (!pk->mss || f->sendsyn) return; // 无mss选项或本机外发连接，则直接退出
 
 if (pk->ip_ver == IP_VER4) mtu = pk->mss + MIN_TCP4; // IPv4 计算MSS 
@@ -172,7 +172,7 @@ sig = 4/6/* : ttl/+dist/- : lenOp ：mss : win,scale : option : quirks : payload
 #### TCP指纹匹配方法分析
 
 **数据包处理**
-```cpp
+```c
 void parse_packet(void* junk, const struct pcap_pkthdr* hdr, const u8* data) {
 
     // 数据包长度校验，IPv6与IPv4类似
@@ -198,7 +198,7 @@ void parse_packet(void* junk, const struct pcap_pkthdr* hdr, const u8* data) {
 ```
 
 **TCP流表处理**
-```cpp
+```c
 static void flow_dispatch(struct packet_data* pk) {
     f = lookup_flow(pk, &to_srv);  // 查找流表
 
@@ -226,7 +226,7 @@ static void flow_dispatch(struct packet_data* pk) {
 ```
 
 **TCP指纹处理**
-```cpp
+```c
 struct tcp_sig* fingerprint_tcp(u8 to_srv, struct packet_data* pk,
                                 struct packet_flow* f) {
     sig = ck_alloc(sizeof(struct tcp_sig));
@@ -239,7 +239,7 @@ struct tcp_sig* fingerprint_tcp(u8 to_srv, struct packet_data* pk,
 ```
 
 **TCP指纹对比**
-```cpp
+```c
 static void tcp_find_match(u8 to_srv, struct tcp_sig* ts, u8 dupe_det,
                            u16 syn_mss) {
     for (i = 0; i < sig_cnt[to_srv][bucket]; i++) {
@@ -285,7 +285,7 @@ static void tcp_find_match(u8 to_srv, struct tcp_sig* ts, u8 dupe_det,
 ```
 ### UPtime 检测
 
-```cpp
+```c
 void check_ts_tcp(u8 to_srv, struct packet_data* pk, struct packet_flow* f) {
 }
 ```

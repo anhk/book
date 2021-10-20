@@ -144,7 +144,7 @@ sig = 4/6/* : ttl/+dist/- : lenOp ：mss : win,scale : option : quirks : payload
                         ?optno: Option数量， 指纹库未用到
     quirks:           Quirks
                         ---- ip ----
-                        df: Don't fragment，不分片本及，IPv4适用
+                        df: Don't fragment，不分片标记，IPv4适用
                         id+: Non-zero IDs when DF set，IPv4适用
                         id-: Zero IDs when DF not set，IPv4适用
                         ecn: IP头部TOS中的ECN选项，值为0x01或0x02

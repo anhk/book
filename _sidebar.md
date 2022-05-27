@@ -15,7 +15,7 @@
   - UEBA架构设计之路
     - [1.UEBA框架](/vipshop-ueba/architecture.md)
     - [2.数据接入和准备](/vipshop-ueba/dataimport.md)
-    - 3.复杂事件处理引擎
+    - [3.复杂事件处理引擎](/vipshop-ueba/cep-engine.md)
     - 4.异常、威胁指标和威胁
     - 5.概率后缀树模型
     - 6.图聚类

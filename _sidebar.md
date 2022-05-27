@@ -19,7 +19,7 @@
     - [4.异常、威胁指标和威胁](/vipshop-ueba/risk-and-threaten.md)
     - [5.概率后缀树模型](/vipshop-ueba/pst-model.md)
     - [6.图聚类](/vipshop-ueba/graph-clustring.md)
-    - 7.横向移动检测
+    - [7.横向移动检测](/vipshop-ueba/Lateral-Movement-Risks.md)
     - 8.恶意软件检测
     - 9.信标检测
     - 10.稀有度分析

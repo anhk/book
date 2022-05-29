@@ -26,10 +26,10 @@
   - 信通院-用户实体行为分析技术
     - [首页及版权](/caict-ueba/frontpage.md)
     - [一、安全新范式](/caict-ueba/Security-Paradigm.md)
-    - 二、架构与技术
-    - 三、部署实施
-    - 四、最佳实践
-    - 五、典型应用案例
-    - 六、行业应用案例
-    - 七、总结
+    - [二、架构与技术](/caict-ueba/Architecture-and-Technology.md)
+    - [三、部署实施](/caict-ueba/Deployment.md)
+    - [四、最佳实践](/caict-ueba/Best-Practices.md)
+    - [五、典型应用案例](/caict-ueba/Typical-Cases.md)
+    - [六、行业应用案例](/caict-ueba/Industry-Cases.md)
+    - [七、总结](/caict-ueba/Summary.md)
     - [关于](/caict-ueba/about.md)

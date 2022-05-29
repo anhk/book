@@ -11,8 +11,8 @@
   - 数据保护
     - [商用密码标准规范](/data-security/gmt-standard.md)
 
-- 唯品会
-  - UEBA架构设计之路
+- 用户实体行为分析技术UEBA
+  - 唯品会-UEBA架构设计之路
     - [1.UEBA框架](/vipshop-ueba/architecture.md)
     - [2.数据接入和准备](/vipshop-ueba/dataimport.md)
     - [3.复杂事件处理引擎](/vipshop-ueba/cep-engine.md)
@@ -23,3 +23,13 @@
     - [8.恶意软件检测](/vipshop-ueba/malicious-software.md)
     - [9.信标检测](/vipshop-ueba/beacon-detection.md)
     - [10.稀有度分析](/vipshop-ueba/Rarity-Analysis.md)
+  - 信通院-用户实体行为分析技术
+    - [首页及版权](/caict-ueba/frontpage.md)
+    - [一、安全新范式](/caict-ueba/Security-Paradigm.md)
+    - 二、架构与技术
+    - 三、部署实施
+    - 四、最佳实践
+    - 五、典型应用案例
+    - 六、行业应用案例
+    - 七、总结
+    - 关于

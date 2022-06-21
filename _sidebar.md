@@ -33,3 +33,6 @@
     - [六、行业应用案例](/caict-ueba/Industry-Cases.md)
     - [七、总结](/caict-ueba/Summary.md)
     - [关于](/caict-ueba/about.md)
+
+- 主机安全
+  - [信通院-主机安全能力建设指南2022](/caict-cwp/caict-cwp.md)

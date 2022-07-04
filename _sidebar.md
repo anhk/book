@@ -40,3 +40,5 @@
 - 用户与认证
   - 集成OpenLDAP&Kerberos统一认证
     - [1.整合后台数据库](/kerberos-openldap/1.database.md)
+    - [2.基于SSSD同步LDAP账号](/kerberos-openldap/2.sssd-ldap.md)
+    - [3.基于SASL/GSSAPI深度集成](/kerberos-openldap/3.sasl-gssapi.md)

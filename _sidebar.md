@@ -36,3 +36,7 @@
 
 - 主机安全
   - [信通院-主机安全能力建设指南2022](/caict-cwp/caict-cwp.md)
+
+- 用户与认证
+  - 集成OpenLDAP与Kerberos实现统一认证
+    - [1.整合后台数据库](/kerberos-openldap/1.database.md)
